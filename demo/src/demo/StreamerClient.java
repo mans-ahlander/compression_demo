@@ -110,13 +110,13 @@ public class StreamerClient {
 	
 	private byte[] getBytes() throws IOException {
 		byte[] buffer = new byte[nbytes];
-		dos.writeByte('S');
+		dos.writeByte('$');
 		dos.writeInt(255);
 		
 		int read = 0;
 		int result = 0;
 		while ((read < nbytes) && (result != -1)) {
-			result = input.read(buffer, read, 100-read);
+			result = input.read(buffer, read, nbytes-read);
 			if (result!=-1)
 				read = read+result;
 		}
