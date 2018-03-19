@@ -9,9 +9,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class StreamerClient {
-	static final int height = 1920;
-	static final int width = 1088;
-	static final int nbytes = height*width*(3/2);
+	int height = 1920;
+	int width = 1088;
+	int nbytes = 1920*1088*(3/2);
 	
 	Socket socket = null;
 	InputStream input = null;
@@ -23,7 +23,10 @@ public class StreamerClient {
 		
 	}
 	
-	public StreamerClient(String ip, int port) {
+	public StreamerClient(String ip, int port, int height, int width) {
+		this.width = width;
+		this.height = height;
+		this.nbytes = height*width*(3/2);
 		
 		//Try Connecting
 	    try {
@@ -68,10 +71,10 @@ public class StreamerClient {
 	}
 	
 	public void CloseStream() throws IOException {
-		socket.close();
+		//socket.close();
 	}
 	
-	public int[][] getImage() throws IOException {
+	public int[] getImage() throws IOException {
 		byte[] bytes = getBytes();
 		
 		int[] im = new int[height*width];
@@ -102,7 +105,7 @@ public class StreamerClient {
 			}
 			i++;
 		}
-		return null;
+		return im;
 	}
 	
 	private byte[] getBytes() throws IOException {
