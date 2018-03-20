@@ -30,9 +30,17 @@ public class DemoMain {
 			f.setVisible(true);
 			
 			Compressor c = new Compressor();
-			
+			JFrame f2 = new JFrame();
+			f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			f2.setResizable(false);
+			RollingGraph rg = new RollingGraph(10);
+			f2.add(rg, BorderLayout.CENTER);
+			f2.pack();
+			f2.setVisible(true);
+		
 			int k = 0;
-			while(k == 0) {
+			while(k < 100000) {
 				imageData = sc.getImage();
 				
 				c.compress(imageData, 1000, height, width);
@@ -46,6 +54,12 @@ public class DemoMain {
 				ui.setImageData(imD);
 				f.revalidate();
 				f.repaint();
+				
+				rg.addValue(k*10);
+				f2.revalidate();
+				f2.repaint();
+				
+				k++;
 			}
 			
 			sc.CloseStream();
