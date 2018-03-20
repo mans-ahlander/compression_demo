@@ -23,13 +23,10 @@ public class UI extends JPanel {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		final BufferedImage image;
+		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
 		
-		image = (BufferedImage) createImage(width, height);
 		WritableRaster raster = image.getRaster();
 		raster.setSamples(0, 0, width, height, 0, imageData);
-		raster.setSamples(0, 0, width, height, 1, imageData);
-		raster.setSamples(0, 0, width, height, 2, imageData);
 		
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
   }

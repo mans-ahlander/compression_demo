@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class StreamerClient {
 	int height = 1920;
@@ -23,10 +25,16 @@ public class StreamerClient {
 		
 	}
 	
-	public StreamerClient(String ip, int port, int height, int width) {
+	public void writeCmd(char cmd, int val) throws IOException {
+		dos.writeByte(cmd);
+		dos.writeInt(Integer.reverseBytes(val));
+       	dos.flush();
+	}
+	
+	public StreamerClient(String ip, int port, int height, int width, int x0, int y0) {
 		this.width = width;
 		this.height = height;
-		this.nbytes = height*width*(3/2);
+		this.nbytes = (height*width*3)/2;
 		
 		//Try Connecting
 	    try {
@@ -36,26 +44,16 @@ public class StreamerClient {
 	           	output = socket.getOutputStream();
 	           	dos = new DataOutputStream(output);
 	           	dis = new DataInputStream(input);
-	           
+	 
 	           	System.out.println("Connected!");
 	           	System.out.println("Initilizing Stream");
 	           	
 	           	//Initialize
-	           	dos.writeByte('w');
-	           	dos.writeInt(width);
-	           
-	           	dos.writeByte('h');
-	           	dos.writeInt(height);
-	           
-	           	dos.writeByte('x');
-	           	dos.writeInt(0);
-	           
-	           	dos.writeByte('y');
-	           	dos.writeInt(0);
-	           
-	           	dos.writeByte('c');
-	           	dos.writeInt(0);
-	           	
+	           	writeCmd('w', width);
+	           	writeCmd('h', height);
+	           	writeCmd('x', x0);
+	           	writeCmd('y', y0);
+	           	writeCmd('c', 0);
 	           	System.out.println("Stream Initialized");
 	           
 	    } catch (UnknownHostException e) {
@@ -71,7 +69,7 @@ public class StreamerClient {
 	}
 	
 	public void CloseStream() throws IOException {
-		//socket.close();
+		socket.close();
 	}
 	
 	public int[] getImage() throws IOException {
@@ -81,37 +79,42 @@ public class StreamerClient {
 
 		int i = 0;
 		int n = 0;
-		byte b = 0;
+		int b = 0;
 		while(i < nbytes) {
-			int val = bytes[i];
+			int val = Byte.toUnsignedInt(bytes[i]);
+			
 			if(b == 0) { //first byte
-				im[n] = val << 4;
+				im[n] = val;
 				b++;
 			}
 			else if(b == 1) { //second byte
-				int val1 = val & 0b11110000;
-				int val2 = val & 0b00001111;
+				int val1 = val & 0x0f;
+				int val2 = val & 0xf0;
 				
-				im[n] += val1 >> 4;
+				im[n] += val1 << 8;
+				im[n] = im[n] >> 4; //SCALE TO 8 BITS
+			
 				n++;
 				
-				im[n] += val2 << 4;
+				im[n] = val2 >> 8;
 				b++;
 			}
-			else {
-				im[n] += val;
+			else { //third byte
+				im[n] += val << 4;
+				im[n] = im[n] >> 4; //SCALE TO 8 BITS
+				
 				n++;
 				b = 0;
 			}
 			i++;
 		}
+
 		return im;
 	}
 	
 	private byte[] getBytes() throws IOException {
 		byte[] buffer = new byte[nbytes];
-		dos.writeByte('$');
-		dos.writeInt(255);
+		writeCmd('$', 255);
 		
 		int read = 0;
 		int result = 0;
@@ -120,9 +123,7 @@ public class StreamerClient {
 			if (result!=-1)
 				read = read+result;
 		}
-		
-		System.out.println("Expected " + nbytes + " bytes. Got " + read);
-		
+	
 		return buffer;
 	}
 }
