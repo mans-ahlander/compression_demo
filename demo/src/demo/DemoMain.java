@@ -29,11 +29,21 @@ public class DemoMain {
 			f.pack();
 			f.setVisible(true);
 			
+			Compressor c = new Compressor();
+			
 			int k = 0;
 			while(k == 0) {
 				imageData = sc.getImage();
 				
-				ui.setImageData(imageData);
+				c.compress(imageData, 1000, height, width);
+
+				System.out.println("Compression ratio: "+(1- ((double) c.getSize())/(((double) imageData.length)*12))*100);
+				int[] imD = c.decoder(height, width, 1000);
+				
+//				for(int i=0;i <imD.length;i++) {
+//					imD[i] = imD[i] >> 4;
+//				}
+				ui.setImageData(imD);
 				f.revalidate();
 				f.repaint();
 			}
