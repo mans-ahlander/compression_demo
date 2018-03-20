@@ -29,6 +29,7 @@ public class DemoMain {
 			f.pack();
 			f.setVisible(true);
 			
+			Compressor c = new Compressor();
 			JFrame f2 = new JFrame();
 			f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			JFrame.setDefaultLookAndFeelDecorated(true);
@@ -38,12 +39,20 @@ public class DemoMain {
 			f2.add(rg, BorderLayout.CENTER);
 			f2.pack();
 			f2.setVisible(true);
-			
+		
 			int k = 0;
 			while(k < 100000) {
 				imageData = sc.getImage();
 				
-				ui.setImageData(imageData);
+				c.compress(imageData, 1000, height, width);
+
+				System.out.println("Compression ratio: "+(1- ((double) c.getSize())/(((double) imageData.length)*12))*100);
+				int[] imD = c.decoder(height, width, 1000);
+				
+//				for(int i=0;i <imD.length;i++) {
+//					imD[i] = imD[i] >> 4;
+//				}
+				ui.setImageData(imD);
 				f.revalidate();
 				f.repaint();
 				

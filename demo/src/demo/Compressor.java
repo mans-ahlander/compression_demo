@@ -51,6 +51,8 @@ public class Compressor {
 		k = 4;
 		m = (int) Math.pow(2, k);
 		
+		output=new ArrayList<Boolean>(Arrays.asList(new Boolean[0]));
+		
 		int bits = 0;
 		int mu;						// mean prediction error?
 		int a;						//pixel above
@@ -193,15 +195,14 @@ public class Compressor {
 			mu = (int) Math.floor(mu/width);
 			setK(mu);
 			m = (int) Math.pow(2, k);
-			System.out.println("k: "+k+", m: "+m+". j:"+j+" mu: "+mu);
 
 		}
 		
 		return output;
 	}
 	
-	public int[][] decoder(int height, int width, int SNR){
-		int[][] im = new int[height][width];
+	public int[] decoder(int height, int width, int SNR){
+		int[] im = new int[height*width];
 		k=4;
 		m = (int) Math.pow(2, k);
 		
@@ -232,16 +233,16 @@ public class Compressor {
 				if (i <= 1) {
 					b = 0;
 				} else {
-					b = im[j][i-2];
+					b = im[j*width+i-2];
 				}
 				
 				//get value from above
 				if (j <= 1) {
 					a = 0;
 				} else {
-					a = im[j-2][i];
+					a = im[(j-2)*width+i];
 					if (i<width-2) {
-						a = a + im[j-2][i+2];
+						a = a + im[(j-2)*width+i+2];
 						a = a >> 1;
 					}
 				}
@@ -255,7 +256,6 @@ public class Compressor {
 				} else {				// a = 0 predict with b
 					x_hat = b;
 				}
-				System.out.println(x_hat);
 				/*
 				 * BIT REMOVAL CALCULATIONS
 				 */
@@ -305,18 +305,16 @@ public class Compressor {
 				mu = mu + e;
 				
 				if(sign){
-					im[j][i] = x_hat - e;
+					im[j*width+i] = x_hat - e;
 				} else {
-					im[j][i] = x_hat + e;
+					im[j*width+i] = x_hat + e;
 				}
 				
-				System.out.println("im["+j+"]["+i+"] = "+im[j][i]);
 				
 			}
 			mu = (int) Math.floor(mu/width);
 			setK(mu);
 			m = (int) Math.pow(2, k);
-			System.out.println("k: "+k+", m: "+m+". j:"+j+" mu: "+mu);
 		}
 		
 		
