@@ -39,25 +39,37 @@ public class DemoMain {
 			f2.add(rg, BorderLayout.CENTER);
 			f2.pack();
 			f2.setVisible(true);
-		
+			
+			long startTime = System.currentTimeMillis();
+			
 			int k = 0;
 			while(k < 100000) {
+				if(k%10 == 0 && k > 0) {
+					long endTime = System.currentTimeMillis();
+					double diff = (endTime - startTime)/10;
+					startTime = System.currentTimeMillis();
+					
+					double fps = 1/diff * 1000;
+					
+					System.out.println("FPS: " + fps);
+				}
+				
 				imageData = sc.getImage();
 				
-				c.compress(imageData, 1000, height, width);
+				c.compress(imageData, 2, height, width);
 
-				System.out.println("Compression ratio: "+(1- ((double) c.getSize())/(((double) imageData.length)*12))*100);
-				int[] imD = c.decoder(height, width, 1000);
+				double cr = 1 - ((double) c.getSize()) / (((double) imageData.length)*12);
+				//System.out.println("Compression ratio: " + cr);
+				//int[] imD = c.decoder(height, width, 1000);
 				
-//				for(int i=0;i <imD.length;i++) {
-//					imD[i] = imD[i] >> 4;
-//				}
-				ui.setImageData(imD);
+				for(int i=0;i <imageData.length;i++) {
+					imageData[i] = imageData[i] >> 4;
+				}
+				ui.setImageData(imageData);
 				f.revalidate();
 				f.repaint();
 				
-				System.out.println("Adding");
-				rg.addValue(k*10);
+				rg.addValue((int)(cr * (512)));
 
 				f2.revalidate();
 				f2.repaint();
