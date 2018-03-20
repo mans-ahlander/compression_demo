@@ -204,22 +204,6 @@ public class Compressor {
 	public int getSize() {
 		return output.size();
 	}
-		
-	
-	
-	
-	
-	
-	public BitSet concatenate_vectors(BitSet vector_1_in, BitSet vector_2_in) {
-	  BitSet vector_1_in_clone = (BitSet)vector_1_in.clone();
-	  BitSet vector_2_in_clone = (BitSet)vector_2_in.clone();
-	  int n = 5;//_desired length of the first (leading) vector
-	  int index = -1;
-	  while (index < (vector_2_in_clone.length() - 1)) {
-	    index = vector_2_in_clone.nextSetBit((index + 1));
-	    vector_1_in_clone.set((index + n));
-	  }
-	  return vector_1_in_clone;
-	}
+
 
 }
