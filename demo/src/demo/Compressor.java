@@ -11,12 +11,12 @@ public class Compressor {
 	int[] intervals = {3, 7, 15, 32, 64, 131, 265, 531};
 	int padding = 0;	
 	
-	public Compressor(int k){
+	public Compressor(){
 		/*
 		 * Constructor, initializes k and m
 		 */
-		this.k = k;
-		m = 2^k;
+//		this.k = k;
+//		m = 2^k;
 	}
 	
 	private void setK(int mu) {
@@ -184,7 +184,7 @@ public class Compressor {
 				List<Boolean> tmpOutput=new ArrayList<Boolean>(Arrays.asList(new Boolean[rBinLength]));
 				while(r!=0) {
 					n++;
-					tmpOutput.set(rBinLength-n-1, (r%2 != 0));//flip binary code
+					tmpOutput.set(rBinLength-n, (r%2 != 0)); //flip binary code
 					r = r >> 1;
 				}
 				//insert to output.
@@ -199,6 +199,25 @@ public class Compressor {
 		}
 		
 		return output;
+	}
+	
+	public int[][] decoder(int height, int width, int snr){
+		int[][] im = new int[height][width];
+		k=4;
+		
+		int mu; 		//average error
+		for(int j=0; j<height; j++) {
+			mu = 0;
+			for(int i = 0; i<width; i++) {
+				/*
+				 * PREDICTION
+				 */
+				
+			}
+		}
+		
+		
+		return im;
 	}
 	
 	public int getSize() {
