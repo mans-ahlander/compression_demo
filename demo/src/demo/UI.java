@@ -29,5 +29,5 @@ public class UI extends JPanel {
 		raster.setSamples(0, 0, width, height, 0, imageData);
 		
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-  }
+	}
 }

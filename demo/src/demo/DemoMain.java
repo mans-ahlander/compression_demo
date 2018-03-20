@@ -29,13 +29,28 @@ public class DemoMain {
 			f.pack();
 			f.setVisible(true);
 			
+			JFrame f2 = new JFrame();
+			f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			f2.setResizable(false);
+			RollingGraph rg = new RollingGraph(10);
+			f2.add(rg, BorderLayout.CENTER);
+			f2.pack();
+			f2.setVisible(true);
+			
 			int k = 0;
-			while(k == 0) {
+			while(k < 100000) {
 				imageData = sc.getImage();
 				
 				ui.setImageData(imageData);
 				f.revalidate();
 				f.repaint();
+				
+				rg.addValue(k*10);
+				f2.revalidate();
+				f2.repaint();
+				
+				k++;
 			}
 			
 			sc.CloseStream();

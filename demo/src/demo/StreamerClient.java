@@ -92,7 +92,6 @@ public class StreamerClient {
 				int val2 = val & 0xf0;
 				
 				im[n] += val1 << 8;
-				im[n] = im[n] >> 4; //SCALE TO 8 BITS
 			
 				n++;
 				
@@ -101,7 +100,6 @@ public class StreamerClient {
 			}
 			else { //third byte
 				im[n] += val << 4;
-				im[n] = im[n] >> 4; //SCALE TO 8 BITS
 				
 				n++;
 				b = 0;
