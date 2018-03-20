@@ -33,7 +33,8 @@ public class DemoMain {
 			f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			f2.setResizable(false);
-			RollingGraph rg = new RollingGraph(10);
+			f2.setLocation(512, 0);
+			RollingGraph rg = new RollingGraph(100);
 			f2.add(rg, BorderLayout.CENTER);
 			f2.pack();
 			f2.setVisible(true);
@@ -46,7 +47,9 @@ public class DemoMain {
 				f.revalidate();
 				f.repaint();
 				
+				System.out.println("Adding");
 				rg.addValue(k*10);
+
 				f2.revalidate();
 				f2.repaint();
 				
