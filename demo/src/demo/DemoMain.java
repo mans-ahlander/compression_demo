@@ -41,7 +41,7 @@ public class DemoMain {
 			f2.setVisible(true);
 			
 			long startTime = System.currentTimeMillis();
-			int imageSize = height*width*12; // bits/frame
+			int imageSize = 1920*1088*12; //height*width*12; // bits/frame
 			
 			int k = 0;
 			while(k < 100000) {
@@ -63,8 +63,8 @@ public class DemoMain {
 					
 					System.out.println("FPS: " + fps);
 
-					int orgBitRate = (int) (imageSize*fps);
-					int bitRate = (int) ((1-cr)*imageSize*fps);
+					int orgBitRate = (int) (imageSize*30);
+					int bitRate = (int) ((1-cr)*imageSize*30);
 					System.out.println("Orginal bit rate: " + orgBitRate + "bit/s");
 					System.out.println("Compressed bit rate: " + bitRate + "bit/s");
 					
