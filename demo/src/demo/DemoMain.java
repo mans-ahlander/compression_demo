@@ -41,9 +41,19 @@ public class DemoMain {
 			f2.setVisible(true);
 			
 			long startTime = System.currentTimeMillis();
+			int imageSize = height*width*12; // bits/frame
 			
 			int k = 0;
 			while(k < 100000) {
+				
+				
+				
+				imageData = sc.getImage();
+				
+				c.compress(imageData, 2, height, width);
+
+				double cr = 1 - ((double) c.getSize()) / (((double) imageData.length)*12);
+				
 				if(k%10 == 0 && k > 0) {
 					long endTime = System.currentTimeMillis();
 					double diff = (endTime - startTime)/10;
@@ -52,13 +62,14 @@ public class DemoMain {
 					double fps = 1/diff * 1000;
 					
 					System.out.println("FPS: " + fps);
+
+					int orgBitRate = (int) (imageSize*fps);
+					int bitRate = (int) ((1-cr)*imageSize*fps);
+					System.out.println("Orginal bit rate: " + orgBitRate + "bit/s");
+					System.out.println("Compressed bit rate: " + bitRate + "bit/s");
+					
 				}
 				
-				imageData = sc.getImage();
-				
-				c.compress(imageData, 2, height, width);
-
-				double cr = 1 - ((double) c.getSize()) / (((double) imageData.length)*12);
 				//System.out.println("Compression ratio: " + cr);
 				//int[] imD = c.decoder(height, width, 1000);
 				
