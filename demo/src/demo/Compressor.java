@@ -10,6 +10,7 @@ public class Compressor {
 	int m;
 	int[] intervals = {3, 7, 15, 32, 64, 131, 265, 531};
 	int padding = 0;	
+	int SNR = 100000;
 	
 	public Compressor(){
 		/*
@@ -17,6 +18,10 @@ public class Compressor {
 		 */
 //		this.k = k;
 //		m = Math.pow(2, k);;
+	}
+	
+	void setSNR(int s) {
+		this.SNR = s;
 	}
 	
 	private void setK(int mu) {
@@ -43,7 +48,7 @@ public class Compressor {
 		
 	}
 	
-	public List<Boolean> compress(int[] im, int SNR, int height, int width) {
+	public List<Boolean> compress(int[] im, int height, int width) {
 
 //	public int compress(int[] im, int SNR, int height, int width) {
 		

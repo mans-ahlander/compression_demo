@@ -56,7 +56,7 @@ public class DemoMain {
 				
 				imageData = sc.getImage();
 				
-				c.compress(imageData, 2, height, width);
+				c.compress(imageData, height, width);
 
 				double cr = 1 - ((double) c.getSize()) / (((double) imageData.length)*12);
 				//System.out.println("Compression ratio: " + cr);
