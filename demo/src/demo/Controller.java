@@ -18,26 +18,11 @@ public class Controller extends JPanel {
 
 	Compressor c = null;
 	RollingGraph currentGraph = null;
-	RollingGraphBitrate gb = null;
-	RollingGraphCompressionRatio gc = null;
 	
-	public Controller(Compressor c, int size) {
-		this.gb = new RollingGraphBitrate(size);
-		this.gc = new RollingGraphCompressionRatio(size);
-		this.currentGraph = gc;
-		
-		GraphButton gbtn1 = new GraphButton(gc, gb);
-		gbtn1.setText("BitRate(Mbit/s)");
-		gbtn1.setSize(64, 32);;
-		this.add(gbtn1);
-		
-		GraphButton gbtn2 = new GraphButton(gc, gc);
-		gbtn2.setText("Compression Ratio(%)");
-		gbtn2.setSize(64, 32);;
-		this.add(gbtn2);
-		
+	public Controller(Compressor c, RollingGraph rg) {
+		this.currentGraph = rg;
 		this.c = c;
-		setPreferredSize(new Dimension(512, 40));
+		setPreferredSize(new Dimension(512, 80));
 		setBackground(new Color(0.9f, 0.9f, 0.9f));
 		
 		JLabel lbl1 = new JLabel();
@@ -68,22 +53,29 @@ public class Controller extends JPanel {
 		btn4.setText("30dB");
 		btn4.setSize(64, 32);;
 		this.add(btn4);
-
+		
+		GraphButton gbtn1 = new GraphButton(false);
+		gbtn1.setText("BitRate(Mbit/s)");
+		gbtn1.setSize(64, 32);
+		this.add(gbtn1);
+		
+		GraphButton gbtn2 = new GraphButton(true);
+		gbtn2.setText("Compression Ratio");
+		gbtn2.setSize(64, 32);
+		this.add(gbtn2);
 	}
 	
 	class GraphButton extends JButton {
 		private static final long serialVersionUID = 1L;
-		RollingGraph currentGraph = null;
-		RollingGraph thisGraph = null;
+		boolean mode;
 		
-		public GraphButton(RollingGraph cur, RollingGraph t) {
-			this.currentGraph = cur;
-			this.thisGraph = t;
+		public GraphButton(boolean m) {
+			this.mode = m;
 			
 			this.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					currentGraph = thisGraph;
+					currentGraph.changeMode(mode);
 				}
 			});
 		}

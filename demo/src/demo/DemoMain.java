@@ -35,22 +35,23 @@ public class DemoMain {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			f2.setResizable(false);
 			f2.setLocation(512, 0);
+		
 			RollingGraph rg = new RollingGraph(100);
+			Controller controller = new Controller(c, rg);
+			f2.add(controller, BorderLayout.NORTH);
 			f2.add(rg, BorderLayout.CENTER);
 			f2.pack();
 			f2.setVisible(true);
 			
 			long startTime = System.currentTimeMillis();
-			int imageSize = 1920*1088*12; //height*width*12; // bits/frame
+			
 			
 			int k = 0;
 			while(k < 100000) {
 				
-				
-				
 				imageData = sc.getImage();
 				
-				c.compress(imageData, 2, height, width);
+				c.compress(imageData, height, width);
 
 				double cr = 1 - ((double) c.getSize()) / (((double) imageData.length)*12);
 				
@@ -62,33 +63,24 @@ public class DemoMain {
 					double fps = 1/diff * 1000;
 					
 					System.out.println("FPS: " + fps);
-
-					int orgBitRate = (int) (imageSize*30);
-					int bitRate = (int) ((1-cr)*imageSize*30);
-					System.out.println("Orginal bit rate: " + orgBitRate + "bit/s");
-					System.out.println("Compressed bit rate: " + bitRate + "bit/s");
-					
 				}
 				
-<<<<<<< HEAD
 				imageData = sc.getImage();
 				
 				c.compress(imageData, height, width);
 
-				double cr = 1 - ((double) c.getSize()) / (((double) imageData.length)*12);
-=======
->>>>>>> branch 'master' of https://github.com/mans-ahlander/compression_demo.git
 				//System.out.println("Compression ratio: " + cr);
 				//int[] imD = c.decoder(height, width, 1000);
 				
 				for(int i=0;i <imageData.length;i++) {
 					imageData[i] = imageData[i] >> 4;
 				}
+				
 				ui.setImageData(imageData);
 				f.revalidate();
 				f.repaint();
 				
-				rg.addValue((int)(cr * (512)));
+				rg.addValue((float)cr);
 
 				f2.revalidate();
 				f2.repaint();
